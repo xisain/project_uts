@@ -1,1 +1,4 @@
 /vendor
+/templates/
+/barang/tmp/*
+/customer/tmp/*

@@ -243,7 +243,7 @@ function getBuyer($conn, $custtId) {
         window.location.href = 'logout.php';
     }
 
-       
+     
 
 </script>
 </body>

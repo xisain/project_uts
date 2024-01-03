@@ -1,6 +1,6 @@
 <?php
 require('../config.php');
-$sql = "SELECT customer_id,customer_name FROM customer";
+$sql = "SELECT customer_id, customer_name, jenis_kelamin, nomor_telepon, address  FROM customer";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -16,7 +16,7 @@ $result = mysqli_query($conn, $sql);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Item Storage</title>
+    <title>Customer</title>
 </head>
 
 <body class="bg-gray-100">
@@ -46,22 +46,41 @@ $result = mysqli_query($conn, $sql);
     <a href="add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
             Add User
         </a>
+        <button id="toggleWidget" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+            Toggle Chart
+        </button>
+        <a href="form.php" class="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+            Import
+        </a>
+        <a href="proses.php" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+            Export
+        </a>
         <table id="example" class="table-auto min-w-full">
             <thead>
                 <tr>
                     <th class="px-4 py-2">Customer ID</th>
-                    <th class="px-4 py2">Customer Name</th>
+                    <th class="px-4 py-2">Customer Name</th>
+                    <th class="px-4 py-2">Jenis Kelamin</th>
+                    <th class="px-4 py-2">Nomor Telepon</th>
+                    <th class="px-4 py-2">Address</th>
                     <th class="px-4 py-2">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = mysqli_fetch_assoc($result)) :
                     $cust_name = $row['customer_name'];
-                    $cust_id = $row['customer_id']
+                    $cust_id = $row['customer_id'];
+                    $cust_gender =  $row['jenis_kelamin'];
+                    $cust_nomor_telepon = $row['nomor_telepon'];
+                    $cust_address = $row['address'];
+                    $gender = ($cust_gender == 1) ? 'Perempuan' : 'Laki-laki'; 
                     ?>
                     <tr>
                         <td class="border px-4 py-2"><?= $cust_id; ?></td>
                         <td class="border px-4 py-2"><?= $cust_name; ?></td>
+                        <td class="border px-4 py-2"><?= $gender; ?></td>
+                        <td class="border px-4 py-2"><?= $cust_nomor_telepon; ?></td>
+                        <td class="border px-4 py-2"><?= $cust_address; ?></td>
                         <td class="border px-4 py-2">
                         <a href='edit.php?id=<?= $cust_id; ?>' class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
                         <a href='delete.php?id=<?=$cust_id;?>' class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="">Delete</a>
