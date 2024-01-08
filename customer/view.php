@@ -16,6 +16,8 @@ $result = mysqli_query($conn, $sql);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <title>Customer</title>
 </head>
 
@@ -89,12 +91,64 @@ $result = mysqli_query($conn, $sql);
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <canvas id="genderChart" width="400" height="200"></canvas>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+        // Initialize DataTable
+        $('#example').DataTable();
+
+        // Fetch gender data for the chart
+        let genderData = <?php
+            $maleCount = 0;
+            $femaleCount = 0;
+            mysqli_data_seek($result, 0); // Reset pointer to the beginning
+            while ($row = mysqli_fetch_assoc($result)) {
+                if ($row['jenis_kelamin'] == 0) {
+                    $maleCount++;
+                } else {
+                    $femaleCount++;
+                }
+            }
+            echo json_encode([$maleCount, $femaleCount]);
+        ?>;
+
+        // Create a bar chart
+        var ctx = document.getElementById('genderChart').getContext('2d');
+        var genderChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Laki-laki', 'Perempuan'],
+                datasets: [{
+                    label: "Gender",
+                    data: genderData,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
+
+      $('#toggleWidget').click(function () {
+            // Toggle the visibility of the chart
+            var chartContainer = $('#genderChart');
+            chartContainer.toggle();
+        });
+    });
     </script>
 </body>
 

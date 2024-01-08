@@ -29,7 +29,7 @@ $result = mysqli_query($conn, $sql);
 <body class="bg-gray-100">
 <nav class="text-gray-600 body-font transition duration-300 ease-in-out fixed top-0 w-full bg-white z-50 shadow-md sticky top-0">
       <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0" href="../index.php">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0" href="../">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
           </svg>
@@ -54,7 +54,7 @@ $result = mysqli_query($conn, $sql);
 
 
     
-       <div class="animate__animated animate__fadeIn__delay-2s">
+      
        <a href="add.php" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
             Add Product
         </a>
@@ -67,7 +67,6 @@ $result = mysqli_query($conn, $sql);
         <a href="proses.php" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
             Export
         </a>
-       </div>
        
         <table id="example" class="table-auto min-w-full">
             <thead class="">

@@ -1,16 +1,61 @@
 <?php
-include("../../config.php");
+include("config.php");
+
+
+
+// Total item SOLD
+$query_itemsold = "SELECT SUM(quantity) AS total_item from ordertable";
+$result_item = mysqli_query($conn, $query_itemsold); 
+
+if($result_item) { 
+    $row = mysqli_fetch_assoc($result_item);
+    $totalItem = $row['total_item'];
+}
+
+// Today Revenue
+$sql = "SELECT SUM(total) AS total_sum FROM `ordertable` WHERE DAY(order_date) = DAY(NOW()) AND MONTH(order_date) = MONTH(NOW()) AND YEAR(order_date) = YEAR(NOW());";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $totalSum = $row['total_sum'];
+
+    // Format the total sum as Rupiah
+    $formatted_total_sum_today = "Rp " . number_format($totalSum, 0, ',', '.');
+
+
+} else {
+    echo "Error in the query: " . mysqli_error($conn);
+}
+
+
+
+// Total Revenue
+$sql = "SELECT SUM(total) AS total_sum FROM ordertable";
+$result_total = mysqli_query($conn, $sql);
+if($result_total){
+    $row = mysqli_fetch_assoc($result_total);
+    $total_Sum = $row['total_sum']; 
+    $formatted_total_sum = "Rp " . number_format($total_Sum, 0, ',', '.');
+   
+
+}
+
+
+
 $sqlproduct = "SELECT product_id, product_name FROM product";
 $resultproduct = mysqli_query($conn, $sqlproduct);
 
-$sqlsales = "SELECT MONTH(order_date) AS month, SUM(quantity) AS total_quantity, product_id FROM ordertable GROUP BY MONTH(order_date), product_id";
+$sqlsales = "SELECT YEAR(order_date) AS order_year, MONTH(order_date) AS order_month, SUM(quantity) AS total_quantity, product_id FROM ordertable GROUP BY order_year, order_month, product_id";
 $resultsales = mysqli_query($conn, $sqlsales);
+
 
 $chartData = [];
 while ($row = mysqli_fetch_assoc($resultsales)) {
-    $chartData[$row['product_id']]['labels'][] = date('F', mktime(0, 0, 0, $row['month'], 1));
+    $chartData[$row['product_id']]['labels'][] = $row['order_year'] . '-' . str_pad($row['order_month'], 2, '0', STR_PAD_LEFT); // Format as YYYY-MM
     $chartData[$row['product_id']]['data'][] = $row['total_quantity'];
 }
+
 
 $chartDataJson = json_encode($chartData);
 ?>
@@ -25,12 +70,34 @@ $chartDataJson = json_encode($chartData);
     <title>Bar Chart Example</title>
 </head>
 <body>
-    <h1>Bar Chart Example</h1>
 
+   
     <!-- Your chart container -->
-    <div style="width: 80%; margin: auto;">
+    <div style="width: 50%; margin: auto;">
+    <div class="flex justify-center items-center mt-8" style="height: 50%;">
+        <div class="box border border-gray-300 rounded-lg p-4 m-4 text-center">
+            <h1>Total Item Sold </h1>
+            <h1><?= $totalItem ?></h1>
+        </div>
+
+        <div class="box border border-gray-300 rounded-lg p-4 m-4 text-center">
+            <h1>Today Sale</h1>
+            <p><?= $formatted_total_sum_today ?></p>
+        </div>
+
+        <div class="box border border-gray-300 rounded-lg p-4 m-4 text-center">
+            <h1>Total Revenue</h1>
+            <p><?= $formatted_total_sum ?></p>
+        </div>
+    </div>
+    <br>
+    <center> <h1 class="">Product Sale By Month</h1></center>
+       
+
         <canvas id="myBarChart"></canvas>
     </div>
+
+  
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

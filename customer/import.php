@@ -9,12 +9,11 @@ require '../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-if(isset($_POST['import'])){ // Jika user mengklik tombol Import
+if(isset($_POST['import'])){ 
 	$nama_file_baru = $_POST['namafile'];
-    $path = 'tmp/' . $nama_file_baru; // Set tempat menyimpan file tersebut dimana
-
+    $path = 'tmp/' . $nama_file_baru; 
     $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-    $spreadsheet = $reader->load($path); // Load file yang tadi diupload ke folder tmp
+    $spreadsheet = $reader->load($path); 
     $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
 	$numrow = 1;
