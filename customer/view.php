@@ -121,7 +121,7 @@ $result = mysqli_query($conn, $sql);
             data: {
                 labels: ['Laki-laki', 'Perempuan'],
                 datasets: [{
-                    label: "Gender",
+                    label: "genderData", 
                     data: genderData,
                     backgroundColor: [
                         'rgba(75, 192, 192, 0.2)',
